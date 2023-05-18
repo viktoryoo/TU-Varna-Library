@@ -12,7 +12,7 @@ public class MainApplication extends Application {
 
   @Override
   public void start(Stage primaryStage) throws Exception {
-    FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("sample.fxml"));
+    FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("login.fxml"));
     Scene scene = new Scene(fxmlLoader.load(), 520, 400);
     primaryStage.setTitle("Library");
     primaryStage.setScene(scene);
