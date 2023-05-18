@@ -48,9 +48,9 @@ public class LoginController {
 
       while (queryResult.next()) {
         if (queryResult.getInt(1) == 1) {
-          MainApplication.changeScene("hello-view.fxml");
+          MainApplication.changeScene("views/admin-operations.fxml", 520, 500);
         } else {
-          wrongCredentials.setText("Wrong email or password!");
+          wrongCredentials.setText("Грешен имейл или парола!");
         }
       }
     } catch (Exception e) {

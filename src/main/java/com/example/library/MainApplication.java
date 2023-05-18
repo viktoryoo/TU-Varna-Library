@@ -12,9 +12,9 @@ public class MainApplication extends Application {
 
   @Override
   public void start(Stage primaryStage) throws Exception {
-    FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("login.fxml"));
+    FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("views/login.fxml"));
     Scene scene = new Scene(fxmlLoader.load(), 520, 400);
-    primaryStage.setTitle("Library");
+    primaryStage.setTitle("Библиотека");
     primaryStage.setScene(scene);
     primaryStage.show();
     this.primaryStage = primaryStage;
@@ -25,9 +25,9 @@ public class MainApplication extends Application {
   }
 
 
-  public static void changeScene(String fxml) throws IOException {
+  public static void changeScene(String fxml, int width, int height) throws IOException {
     FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource(fxml));
-    Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+    Scene scene = new Scene(fxmlLoader.load(), width, height);
     primaryStage.setScene(scene);
   }
 }

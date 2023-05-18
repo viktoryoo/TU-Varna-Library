@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="500.0" prefWidth="520.0" xmlns="http://javafx.com/javafx/19"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.example.library.controllers.AdminOperationsController">
+  <right>
+    <AnchorPane prefHeight="400.0" prefWidth="294.0" BorderPane.alignment="CENTER">
+      <children>
+        <Label alignment="CENTER" layoutX="28.0" layoutY="14.0" prefHeight="46.0" prefWidth="224.0"
+            text="Операции">
+          <font>
+            <Font name="Verdana Bold" size="36.0"/>
+          </font>
+        </Label>
+        <Label fx:id="wrongCredentials" layoutX="22.0" layoutY="286.0" textFill="#ff4d4d">
+          <font>
+            <Font name="Verdana Bold Italic" size="13.0"/>
+          </font>
+        </Label>
+        <Hyperlink layoutX="22.0" layoutY="112.0" text="Създаване на нов администратор"
+            onAction="#createNewAdministrator">
+          <font>
+            <Font name="Verdana Italic" size="13.0"/>
+          </font>
+        </Hyperlink>
+        <Hyperlink layoutX="23.0" layoutY="136.0" text="Създаване на нов читател"
+            onAction="#createNewReader">
+          <font>
+            <Font name="Verdana Italic" size="13.0"/>
+          </font>
+        </Hyperlink>
+        <Hyperlink layoutX="23.0" layoutY="160.0" text="Отдаване на книги" onAction="#renderBooks">
+          <font>
+            <Font name="Verdana Italic" size="13.0"/>
+          </font>
+        </Hyperlink>
+        <Hyperlink layoutX="23.0" layoutY="224.0" text="Добавяне на книги" onAction="#addBooks">
+          <font>
+            <Font name="Verdana Italic" size="13.0"/>
+          </font>
+        </Hyperlink>
+        <Label layoutX="19.0" layoutY="68.0" prefHeight="46.0" prefWidth="224.0"
+            text="Потребители:">
+          <font>
+            <Font name="Verdana Bold" size="18.0"/>
+          </font>
+        </Label>
+        <Label layoutX="19.0" layoutY="182.0" prefHeight="46.0" prefWidth="224.0" text="Книги:">
+          <font>
+            <Font name="Verdana Bold" size="18.0"/>
+          </font>
+        </Label>
+        <Hyperlink layoutX="23.0" layoutY="246.0" text="Заемане на книги" onAction="#rentBooks">
+          <font>
+            <Font name="Verdana Italic" size="13.0"/>
+          </font>
+        </Hyperlink>
+        <Hyperlink layoutX="21.0" layoutY="268.0" text="Връщане на книги" onAction="#returnBooks">
+          <font>
+            <Font name="Verdana Italic" size="13.0"/>
+          </font>
+        </Hyperlink>
+        <Hyperlink layoutX="20.0" layoutY="291.0" text="Бракуване на книги" onAction="#scrapBooks">
+          <font>
+            <Font name="Verdana Italic" size="13.0"/>
+          </font>
+        </Hyperlink>
+        <Hyperlink layoutX="19.0" layoutY="316.0" text="Архивиране на книги"
+            onAction="#archiveBooks">
+          <font>
+            <Font name="Verdana Italic" size="13.0"/>
+          </font>
+        </Hyperlink>
+        <Label layoutX="19.0" layoutY="338.0" prefHeight="46.0" prefWidth="224.0" text="Справки:">
+          <font>
+            <Font name="Verdana Bold" size="18.0"/>
+          </font>
+        </Label>
+        <Hyperlink layoutX="19.0" layoutY="373.0" text="Подадени формуляри"
+            onAction="#countReferences">
+          <font>
+            <Font name="Verdana Italic" size="13.0"/>
+          </font>
+        </Hyperlink>
+        <Hyperlink layoutX="19.0" layoutY="395.0" text="Книги" onAction="#booksReferences">
+          <font>
+            <Font name="Verdana Italic" size="13.0"/>
+          </font>
+        </Hyperlink>
+        <Hyperlink layoutX="21.0" layoutY="417.0" text="Потребители" onAction="#readersReferences">
+          <font>
+            <Font name="Verdana Italic" size="13.0"/>
+          </font>
+        </Hyperlink>
+        <Hyperlink layoutX="21.0" layoutY="439.0" text="Рейтинг на потребители"
+            onAction="#readersRatingReferences">
+          <font>
+            <Font name="Verdana Italic" size="13.0"/>
+          </font>
+        </Hyperlink>
+      </children>
+    </AnchorPane>
+  </right>
+  <left>
+    <AnchorPane prefHeight="407.0" prefWidth="228.0" style="-fx-background-color: #263F73;"
+        BorderPane.alignment="CENTER">
+      <children>
+        <Label alignment="CENTER" layoutX="33.0" layoutY="110.0" prefWidth="164.0" text="Библиотека"
+            textFill="WHITE">
+          <font>
+            <Font name="Verdana Bold Italic" size="24.0"/>
+          </font>
+        </Label>
+        <ImageView fitHeight="140.0" fitWidth="164.0" layoutX="32.0" layoutY="154.0"
+            pickOnBounds="true" preserveRatio="true">
+          <image>
+            <Image url="@../images/istockphoto-1354989842-170667a.jpg"/>
+          </image>
+        </ImageView>
+      </children>
+    </AnchorPane>
+  </left>
+</BorderPane>
