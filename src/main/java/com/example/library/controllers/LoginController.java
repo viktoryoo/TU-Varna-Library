@@ -2,10 +2,7 @@ package com.example.library.controllers;
 
 import com.example.library.MainApplication;
 import com.example.library.database.DatabaseConnection;
-import java.io.IOException;
-import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
+import com.example.library.helpers.HashPasswordHelper;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -27,14 +24,14 @@ public class LoginController {
   private Label wrongCredentials;
 
   @FXML
-  protected void onLoginButtonClick() throws IOException, NoSuchAlgorithmException {
+  protected void onLoginButtonClick() throws NoSuchAlgorithmException {
     validateLogin();
   }
 
   public void validateLogin() throws NoSuchAlgorithmException {
     DatabaseConnection connectNow = new DatabaseConnection();
     Connection connectDB = connectNow.getConnection();
-    String cryptedPassword = cryptPassword(passwordInput.getText());
+    String cryptedPassword = HashPasswordHelper.cryptPassword(passwordInput.getText());
 
     String userQuery = "SELECT count(1) from Users WHERE email = '"
         + emailInput.getText()
@@ -56,12 +53,5 @@ public class LoginController {
     } catch (Exception e) {
       e.printStackTrace();
     }
-  }
-
-  private String cryptPassword(String password) throws NoSuchAlgorithmException {
-    MessageDigest md5 = MessageDigest.getInstance("MD5");
-    md5.update(StandardCharsets.UTF_8.encode(password));
-
-    return String.format("%032x", new BigInteger(1, md5.digest()));
   }
 }

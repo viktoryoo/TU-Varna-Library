@@ -8,7 +8,7 @@ public class AdminOperationsController {
 
   @FXML
   protected void createNewAdministrator() throws IOException {
-    MainApplication.changeScene("views/hello-view.fxml", 520, 500);
+    MainApplication.changeScene("views/create-admin.fxml", 520, 600);
   }
 
   @FXML
