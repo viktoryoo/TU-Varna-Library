@@ -13,4 +13,5 @@ module com.example.library {
   exports com.example.library.controllers;
 
   requires java.sql;
+  requires java.dotenv;
 }
