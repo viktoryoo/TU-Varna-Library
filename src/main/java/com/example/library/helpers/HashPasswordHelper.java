@@ -6,7 +6,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class HashPasswordHelper {
-  public static String cryptPassword(String password) throws NoSuchAlgorithmException {
+  public static String hashPassword(String password) throws NoSuchAlgorithmException {
     MessageDigest md5 = MessageDigest.getInstance("MD5");
     md5.update(StandardCharsets.UTF_8.encode(password));
 

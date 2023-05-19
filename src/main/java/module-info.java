@@ -14,4 +14,9 @@ module com.example.library {
 
   requires java.sql;
   requires java.dotenv;
+  requires org.hibernate.orm.core;
+  requires jakarta.persistence;
+  requires java.naming;
+
+  opens com.example.library.entities;
 }

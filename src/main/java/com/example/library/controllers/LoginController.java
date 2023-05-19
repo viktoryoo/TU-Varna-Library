@@ -1,12 +1,11 @@
 package com.example.library.controllers;
 
 import com.example.library.MainApplication;
-import com.example.library.database.DatabaseConnection;
+import com.example.library.dao.UserDao;
+import com.example.library.entities.User;
 import com.example.library.helpers.HashPasswordHelper;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.util.Optional;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -29,26 +28,15 @@ public class LoginController {
   }
 
   public void validateLogin() throws NoSuchAlgorithmException {
-    DatabaseConnection connectNow = new DatabaseConnection();
-    Connection connectDB = connectNow.getConnection();
-    String cryptedPassword = HashPasswordHelper.cryptPassword(passwordInput.getText());
-
-    String userQuery = "SELECT count(1) from Users WHERE email = '"
-        + emailInput.getText()
-        + "' AND password = '"
-        + cryptedPassword
-        + "'";
+    String cryptedPassword = HashPasswordHelper.hashPassword(passwordInput.getText());
+    Optional<User> newUser = new UserDao().findUser(emailInput.getText(), cryptedPassword);
 
     try {
-      Statement statement = connectDB.createStatement();
-      ResultSet queryResult = statement.executeQuery(userQuery);
-
-      while (queryResult.next()) {
-        if (queryResult.getInt(1) == 1) {
-          MainApplication.changeScene("views/admin-operations.fxml", 520, 500);
-        } else {
-          wrongCredentials.setText("Грешен имейл или парола!");
-        }
+      //TODO: Check if is admin or reader
+      if (newUser.isPresent()) {
+        MainApplication.changeScene("views/admin-operations.fxml", 520, 500);
+      } else {
+        wrongCredentials.setText("Грешен имейл или парола!");
       }
     } catch (Exception e) {
       e.printStackTrace();

@@ -7,13 +7,8 @@ import javafx.fxml.FXML;
 public class AdminOperationsController {
 
   @FXML
-  protected void createNewAdministrator() throws IOException {
-    MainApplication.changeScene("views/create-admin.fxml", 520, 600);
-  }
-
-  @FXML
-  protected void createNewReader() throws IOException {
-    MainApplication.changeScene("views/hello-view.fxml", 520, 500);
+  protected void createNewUser() throws IOException {
+    MainApplication.changeScene("views/create-user.fxml", 520, 600);
   }
 
   @FXML

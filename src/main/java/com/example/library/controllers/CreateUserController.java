@@ -1,13 +1,14 @@
 package com.example.library.controllers;
 
 import com.example.library.MainApplication;
-import com.example.library.database.DatabaseConnection;
+import com.example.library.dao.UserDao;
+import com.example.library.entities.Role;
+import com.example.library.entities.User;
 import com.example.library.errors.ErrorMessages;
 import com.example.library.exceptions.ValidationInputException;
 import com.example.library.helpers.HashPasswordHelper;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Connection;
-import java.sql.Statement;
 import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 import javafx.fxml.FXML;
@@ -18,7 +19,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 
-public class CreateAdminController {
+public class CreateUserController {
 
   @FXML
   private TextField nameInput;
@@ -42,11 +43,12 @@ public class CreateAdminController {
   private Label validationMessage;
 
   @FXML
-  protected void OnCreateButtonClick() throws ValidationInputException, NoSuchAlgorithmException {
+  protected void OnCreateButtonClick()
+      throws ValidationInputException, NoSuchAlgorithmException, IOException {
     try {
       validateInputs();
       setNewUserInDatabase();
-    } catch (ValidationInputException | NoSuchAlgorithmException e) {
+    } catch (ValidationInputException | NoSuchAlgorithmException | IOException e) {
     }
   }
 
@@ -105,32 +107,16 @@ public class CreateAdminController {
     typeUser.setValue("Читател");
   }
 
-  private void setNewUserInDatabase() throws NoSuchAlgorithmException {
-    DatabaseConnection connectNow = new DatabaseConnection();
-    Connection connectDB = connectNow.getConnection();
-    String cryptedPassword = HashPasswordHelper.cryptPassword(passwordInput.getText());
+  private void setNewUserInDatabase() throws NoSuchAlgorithmException, IOException {
+    String hashPassword = HashPasswordHelper.hashPassword(passwordInput.getText());
+    Role role = typeUser.getValue().equals("Читател") ? Role.READER : Role.ADMIN;
+    int phoneNumber = Integer.parseInt(mobileNumberInput.getText());
 
-    String newUserQuery =
-        "INSERT INTO Users (name, address, phone_number, email, is_admin, password) VALUES (" + "'"
-            + nameInput.getText()
-            + "', '"
-            + addressTextArea.getText()
-            + "', '"
-            + mobileNumberInput.getText()
-            + "', '"
-            + emailInput.getText()
-            + "', '"
-            + typeUser.getValue().contains("Администратор")
-            + "', '"
-            + cryptedPassword
-            + "')";
+    User newUser = new User(nameInput.getText(), addressTextArea.getText(),
+        phoneNumber, emailInput.getText(), role,
+        hashPassword);
+    new UserDao().save(newUser);
 
-    try {
-      Statement statement = connectDB.createStatement();
-      statement.execute(newUserQuery);
-      MainApplication.changeScene("views/admin-operations.fxml", 520, 500);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+    MainApplication.changeScene("views/admin-operations.fxml", 520, 500);
   }
 }
