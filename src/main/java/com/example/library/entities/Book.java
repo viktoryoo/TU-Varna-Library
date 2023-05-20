@@ -20,6 +20,8 @@ public class Book {
   private String publisher;
   private int yearOfPublication;
   private boolean isAvailable;
+  private String inventoryNumber;
+  private int quantity;
 
   @CreationTimestamp
   private LocalDateTime createdAt;
@@ -27,7 +29,9 @@ public class Book {
   @UpdateTimestamp
   private LocalDateTime updatedAt;
 
-  public Book(Integer id, String title, String author, String genre, String publisher, int yearOfPublication, boolean isAvailable, LocalDateTime createdAt, LocalDateTime updatedAt) {
+  public Book(Integer id, String title, String author, String genre, String publisher,
+      int yearOfPublication, boolean isAvailable, String inventoryNumber, int quantity,
+      LocalDateTime createdAt, LocalDateTime updatedAt) {
     this.id = id;
     this.title = title;
     this.author = author;
@@ -35,6 +39,8 @@ public class Book {
     this.publisher = publisher;
     this.yearOfPublication = yearOfPublication;
     this.isAvailable = isAvailable;
+    this.inventoryNumber = inventoryNumber;
+    this.quantity = quantity;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
@@ -61,6 +67,14 @@ public class Book {
 
   public boolean isAvailable() {
     return isAvailable;
+  }
+
+  public String getInventoryNumber() {
+    return inventoryNumber;
+  }
+
+  public int getQuantity() {
+    return quantity;
   }
 
   public void setId(int id) {
@@ -97,6 +111,14 @@ public class Book {
 
   public void setCreatedAt(LocalDateTime createdAt) {
     this.createdAt = createdAt;
+  }
+
+  public void setInventoryNumber(String inventoryNumber) {
+    this.inventoryNumber = inventoryNumber;
+  }
+
+  public void setQuantity(int quantity) {
+    this.quantity = quantity;
   }
 
   public LocalDateTime getUpdatedAt() {

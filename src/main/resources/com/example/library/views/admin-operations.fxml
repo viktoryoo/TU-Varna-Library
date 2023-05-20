@@ -22,12 +22,12 @@
             <Font name="Verdana Italic" size="13.0" />
           </font>
         </Hyperlink>
-        <Hyperlink layoutX="23.0" layoutY="129.0" onAction="#renderBooks" text="Отдаване на книги">
+        <Hyperlink layoutX="23.0" layoutY="129.0" onAction="#renderBooks" text="Отдаване на книга">
           <font>
             <Font name="Verdana Italic" size="13.0" />
           </font>
         </Hyperlink>
-        <Hyperlink layoutX="23.0" layoutY="193.0" onAction="#addBooks" text="Добавяне на книги">
+        <Hyperlink layoutX="23.0" layoutY="193.0" onAction="#addBooks" text="Добавяне на книга">
           <font>
             <Font name="Verdana Italic" size="13.0" />
           </font>
@@ -42,22 +42,22 @@
             <Font name="Verdana Bold" size="18.0" />
           </font>
         </Label>
-        <Hyperlink layoutX="23.0" layoutY="215.0" onAction="#rentBooks" text="Заемане на книги">
+        <Hyperlink layoutX="23.0" layoutY="215.0" onAction="#rentBooks" text="Заемане на книга">
           <font>
             <Font name="Verdana Italic" size="13.0" />
           </font>
         </Hyperlink>
-        <Hyperlink layoutX="21.0" layoutY="237.0" onAction="#returnBooks" text="Връщане на книги">
+        <Hyperlink layoutX="21.0" layoutY="237.0" onAction="#returnBooks" text="Връщане на книга">
           <font>
             <Font name="Verdana Italic" size="13.0" />
           </font>
         </Hyperlink>
-        <Hyperlink layoutX="20.0" layoutY="260.0" onAction="#scrapBooks" text="Бракуване на книги">
+        <Hyperlink layoutX="20.0" layoutY="260.0" onAction="#scrapBooks" text="Бракуване на книга">
           <font>
             <Font name="Verdana Italic" size="13.0" />
           </font>
         </Hyperlink>
-        <Hyperlink layoutX="19.0" layoutY="285.0" onAction="#archiveBooks" text="Архивиране на книги">
+        <Hyperlink layoutX="19.0" layoutY="285.0" onAction="#archiveBooks" text="Архивиране на книга">
           <font>
             <Font name="Verdana Italic" size="13.0" />
           </font>

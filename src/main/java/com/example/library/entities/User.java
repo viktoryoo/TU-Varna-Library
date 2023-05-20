@@ -43,13 +43,15 @@ public class User {
   }
 
   public User(String name, String address, int phoneNumber, String email, Role role,
-      String password) {
+      String password, LocalDateTime createdAt, LocalDateTime updatedAt) {
     this.name = name;
     this.address = address;
     this.phoneNumber = phoneNumber;
     this.email = email;
     this.role = role;
     this.password = password;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 
   public User() {
