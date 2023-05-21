@@ -9,15 +9,15 @@ class BookDaoTest {
 
     @Test
     void getAll() {
-        bookDao.save(new Book(null, "test", "author", "roman", "publisher", 1999, true, "1000/1231", 2, null, null));
-        bookDao.save(new Book(null, "test", "author", "roman", "publisher", 1999, true, "1000/1231", 2, null, null));
+        bookDao.save(new Book(null, "test", "author", "roman", "publisher", 1999, true, false,  "1000/1231", 2, null, null));
+        bookDao.save(new Book(null, "test", "author", "roman", "publisher", 1999, true, false,  "1000/1231", 2, null, null));
         bookDao.getAll().forEach(System.out::println);
         Assertions.assertEquals(2, bookDao.getAll().size());
     }
 
     @Test
     void save() {
-        var book1 = new Book(null, "test", "author", "roman", "publisher", 1999, true, "1000/1231", 2, null, null);
+        var book1 = new Book(null, "test", "author", "roman", "publisher", 1999, true, false,  "1000/1231", 2, null, null);
         bookDao.save(book1);
         Assertions.assertNotNull(book1.getId());
     }

@@ -20,6 +20,7 @@ public class Book {
   private String publisher;
   private int yearOfPublication;
   private boolean isAvailable;
+  private boolean isScraped;
   private String inventoryNumber;
   private int quantity;
 
@@ -30,7 +31,7 @@ public class Book {
   private LocalDateTime updatedAt;
 
   public Book(Integer id, String title, String author, String genre, String publisher,
-      int yearOfPublication, boolean isAvailable, String inventoryNumber, int quantity,
+      int yearOfPublication, boolean isAvailable, boolean isScraped, String inventoryNumber, int quantity,
       LocalDateTime createdAt, LocalDateTime updatedAt) {
     this.id = id;
     this.title = title;
@@ -39,10 +40,14 @@ public class Book {
     this.publisher = publisher;
     this.yearOfPublication = yearOfPublication;
     this.isAvailable = isAvailable;
+    this.isScraped = isScraped;
     this.inventoryNumber = inventoryNumber;
     this.quantity = quantity;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
+  }
+
+  public Book() {
   }
 
   public String getTitle() {
@@ -103,6 +108,10 @@ public class Book {
 
   public void setAvailable(boolean available) {
     isAvailable = available;
+  }
+
+  public void setScraped(boolean scraped) {
+    isScraped = scraped;
   }
 
   public LocalDateTime getCreatedAt() {

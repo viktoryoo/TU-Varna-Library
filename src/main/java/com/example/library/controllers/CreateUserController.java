@@ -86,7 +86,7 @@ public class CreateUserController extends Controller {
   }
 
   public void initialize() {
-    setInputTextFormat(InputFormat.ONLY_DIGITS, mobileNumberInput);
+    setInputTextFormat(InputFormat.MOBILE_NUMBER, mobileNumberInput);
     setValuesToCombox(ComboBoxType.TYPE_USER, typeUser);
   }
 

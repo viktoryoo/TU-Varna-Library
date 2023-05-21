@@ -64,7 +64,7 @@ public class AddBookController extends Controller {
 
   private void setNewBookInDatabase() throws NoSuchAlgorithmException, IOException {
     Book newBook = new Book(null, titleInput.getText(), authorInput.getText(), genreInput.getText(),
-        publisherInput.getText(), Integer.parseInt(yearOfPublicationInput.getText()), true,
+        publisherInput.getText(), Integer.parseInt(yearOfPublicationInput.getText()), true, false,
         inventoryNumberInput.getText(),
         Integer.parseInt(quantityInput.getText()), LocalDateTime.now(), LocalDateTime.now());
     new BookDao().save(newBook);

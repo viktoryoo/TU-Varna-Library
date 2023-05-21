@@ -38,7 +38,7 @@ public class AdminOperationsController {
 
   @FXML
   protected void scrapBooks() throws IOException {
-    MainApplication.changeScene("views/hello-view.fxml", 520, 500);
+    MainApplication.changeScene("views/scrap-book.fxml", 820, 600);
   }
 
   @FXML
