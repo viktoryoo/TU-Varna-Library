@@ -33,6 +33,16 @@ public class UnassignedReaderController extends Controller {
 
   private FilteredList<User> filteredReaders;
 
+  @FXML
+  void removeReader() {
+    User selectedUser = readers.getSelectionModel().getSelectedItem();
+    if (selectedUser != null) {
+      selectedUser.setIsAssign(false);
+      new UserDao().update(selectedUser);
+      filteredReaders.getSource().remove(selectedUser);
+    }
+  }
+
   public void initialize() {
     // Set the cell value factories for each TableColumn
     nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -48,7 +58,7 @@ public class UnassignedReaderController extends Controller {
 
   private void loadData() {
     try {
-      List<User> allUsers = new UserDao().getAllReaders();
+      List<User> allUsers = new UserDao().getAllAssignedReaders();
       readers.getItems().clear();
 
       filteredReaders = new FilteredList<>(FXCollections.observableArrayList(allUsers));
@@ -66,6 +76,7 @@ public class UnassignedReaderController extends Controller {
         }
 
         String lowercaseFilter = newValue.toLowerCase();
+
         return user.getName().toLowerCase().contains(lowercaseFilter);
       });
     });

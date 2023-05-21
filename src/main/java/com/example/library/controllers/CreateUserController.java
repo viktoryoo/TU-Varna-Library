@@ -93,11 +93,11 @@ public class CreateUserController extends Controller {
   private void setNewUserInDatabase() throws NoSuchAlgorithmException, IOException {
     String hashPassword = HashPasswordHelper.hashPassword(passwordInput.getText());
     Role role = typeUser.getValue().equals("Читател") ? Role.READER : Role.ADMIN;
-    long phoneNumber = Long.parseLong(mobileNumberInput.getText());
+    int phoneNumber = Integer.parseInt(mobileNumberInput.getText());
 
     User newUser = new User(nameInput.getText(), addressTextArea.getText(),
         phoneNumber, emailInput.getText(), role,
-        hashPassword, LocalDateTime.now(), LocalDateTime.now());
+        hashPassword, true, LocalDateTime.now(), LocalDateTime.now());
     new UserDao().save(newUser);
 
     MainApplication.changeScene("views/admin-operations.fxml", 520, 500);

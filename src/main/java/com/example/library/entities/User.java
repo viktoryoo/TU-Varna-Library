@@ -17,12 +17,13 @@ public class User {
 
   private String name;
   private String address;
-  private long phoneNumber;
+  private int phoneNumber;
 
   private String email;
 
   private Role role;
   private String password;
+  private boolean isAssign;
 
   @CreationTimestamp
   private LocalDateTime createdAt;
@@ -30,8 +31,8 @@ public class User {
   @UpdateTimestamp
   private LocalDateTime updatedAt;
 
-  public User(Integer id, String name, String address, long phoneNumber, String email, Role role,
-      String password, LocalDateTime createdAt, LocalDateTime updatedAt) {
+  public User(Integer id, String name, String address, int phoneNumber, String email, Role role,
+      String password, boolean isAssign, LocalDateTime createdAt, LocalDateTime updatedAt) {
     this.id = id;
     this.name = name;
     this.address = address;
@@ -39,18 +40,20 @@ public class User {
     this.email = email;
     this.role = role;
     this.password = password;
+    this.isAssign = isAssign;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
 
-  public User(String name, String address, long phoneNumber, String email, Role role,
-      String password, LocalDateTime createdAt, LocalDateTime updatedAt) {
+  public User(String name, String address, int phoneNumber, String email, Role role,
+      String password, boolean isAssign, LocalDateTime createdAt, LocalDateTime updatedAt) {
     this.name = name;
     this.address = address;
     this.phoneNumber = phoneNumber;
     this.email = email;
     this.role = role;
     this.password = password;
+    this.isAssign = isAssign;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
@@ -70,7 +73,7 @@ public class User {
     return this.address;
   }
 
-  public long getPhoneNumber() {
+  public int getPhoneNumber() {
     return this.phoneNumber;
   }
 
@@ -120,6 +123,10 @@ public class User {
 
   public void setCreatedAt(LocalDateTime createdAt) {
     this.createdAt = createdAt;
+  }
+
+  public void setIsAssign (boolean isAssign) {
+    this.isAssign = isAssign;
   }
 
   public LocalDateTime getUpdatedAt() {

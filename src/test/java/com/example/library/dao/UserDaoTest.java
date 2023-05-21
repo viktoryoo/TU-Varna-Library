@@ -11,9 +11,9 @@ class UserDaoTest {
 
     @Test
     void getAll() {
-        userDao.save(new User(null, "test", "test", 123, "test", Role.ADMIN, "test", LocalDateTime.now(),
+        userDao.save(new User(null, "test", "test", 123, "test", Role.ADMIN, "test",true , LocalDateTime.now(),
             LocalDateTime.now()));
-        userDao.save(new User(null, "test", "test", 123, "test", Role.READER, "test", LocalDateTime.now(),
+        userDao.save(new User(null, "test", "test", 123, "test", Role.READER, "test", true,  LocalDateTime.now(),
             LocalDateTime.now()));
         userDao.getAll().forEach(System.out::println);
         Assertions.assertEquals(2, userDao.getAll().size());
@@ -21,9 +21,9 @@ class UserDaoTest {
 
     @Test
     void save() {
-        userDao.save(new User(null, "test", "test", 123, "test", Role.ADMIN, "test", LocalDateTime.now(),
+        userDao.save(new User(null, "test", "test", 123, "test", Role.ADMIN, "test", true, LocalDateTime.now(),
             LocalDateTime.now()));
-        userDao.save(new User(null, "test", "test", 123, "test", Role.ADMIN, "test", LocalDateTime.now(),
+        userDao.save(new User(null, "test", "test", 123, "test", Role.ADMIN, "test", true,  LocalDateTime.now(),
             LocalDateTime.now()));
     }
 }
