@@ -4,10 +4,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
-import java.time.LocalDateTime;
 
 @Entity
 public class User {
@@ -32,7 +31,7 @@ public class User {
   private LocalDateTime updatedAt;
 
   public User(Integer id, String name, String address, int phoneNumber, String email, Role role,
-      String password) {
+      String password, LocalDateTime createdAt, LocalDateTime updatedAt) {
     this.id = id;
     this.name = name;
     this.address = address;
@@ -40,6 +39,8 @@ public class User {
     this.email = email;
     this.role = role;
     this.password = password;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 
   public User(String name, String address, int phoneNumber, String email, Role role,

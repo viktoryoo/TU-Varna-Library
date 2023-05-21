@@ -2,11 +2,15 @@ package com.example.library.controllers;
 
 import com.example.library.entities.ComboBoxType;
 import com.example.library.entities.InputFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.converter.LocalDateTimeStringConverter;
 
 public class Controller {
 
@@ -45,5 +49,12 @@ public class Controller {
         break;
       }
     }
+  }
+
+  protected void formatDate(TableColumn dateColumn) {
+    // Set the cell factory for the TableColumn variable to format the LocalDateTime value
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+    dateColumn.setCellFactory(column -> new TextFieldTableCell<>(
+        new LocalDateTimeStringConverter(formatter, formatter)));
   }
 }

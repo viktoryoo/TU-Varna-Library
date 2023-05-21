@@ -12,6 +12,11 @@ public class AdminOperationsController {
   }
 
   @FXML
+  protected void cancelUser() throws IOException {
+    MainApplication.changeScene("views/unassign-user.fxml", 620, 600);
+  }
+
+  @FXML
   protected void renderBooks() throws IOException {
     MainApplication.changeScene("views/hello-view.fxml", 520, 500);
   }

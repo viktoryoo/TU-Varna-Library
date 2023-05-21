@@ -73,7 +73,12 @@
       <artifactId>hibernate-core</artifactId>
       <version>6.2.3.Final</version>
     </dependency>
-
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>RELEASE</version>
+      <scope>compile</scope>
+    </dependency>
 
 
   </dependencies>

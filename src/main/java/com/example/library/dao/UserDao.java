@@ -26,6 +26,12 @@ public class UserDao implements Dao<User> {
         return query.getResultList();
     }
 
+    public List<User> getAllReaders() {
+        Query query = entityManager.createQuery("SELECT e FROM User e WHERE e.role = 1");
+
+        return query.getResultList();
+    }
+
     public Optional<User> findUser(String email, String password) {
         Query query = entityManager.createQuery("SELECT e FROM User e WHERE e.email = :email AND e.password = :password");
         query.setParameter("email", email);
