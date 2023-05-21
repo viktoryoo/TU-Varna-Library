@@ -17,7 +17,7 @@ public class Controller {
   protected void setInputTextFormat(InputFormat format, TextField input) {
     switch (format) {
       case ONLY_DIGITS -> {
-        Pattern pattern = Pattern.compile("\\d*"); // Only allow digits
+        Pattern pattern = Pattern.compile("^0\\d*"); // Only allow digits
         UnaryOperator<TextFormatter.Change> filter = change -> {
           String newText = change.getControlNewText();
           if (pattern.matcher(newText).matches()) {

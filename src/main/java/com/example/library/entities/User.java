@@ -17,7 +17,7 @@ public class User {
 
   private String name;
   private String address;
-  private int phoneNumber;
+  private long phoneNumber;
 
   private String email;
 
@@ -30,7 +30,7 @@ public class User {
   @UpdateTimestamp
   private LocalDateTime updatedAt;
 
-  public User(Integer id, String name, String address, int phoneNumber, String email, Role role,
+  public User(Integer id, String name, String address, long phoneNumber, String email, Role role,
       String password, LocalDateTime createdAt, LocalDateTime updatedAt) {
     this.id = id;
     this.name = name;
@@ -43,7 +43,7 @@ public class User {
     this.updatedAt = updatedAt;
   }
 
-  public User(String name, String address, int phoneNumber, String email, Role role,
+  public User(String name, String address, long phoneNumber, String email, Role role,
       String password, LocalDateTime createdAt, LocalDateTime updatedAt) {
     this.name = name;
     this.address = address;
@@ -70,7 +70,7 @@ public class User {
     return this.address;
   }
 
-  public int getPhoneNumber() {
+  public long getPhoneNumber() {
     return this.phoneNumber;
   }
 

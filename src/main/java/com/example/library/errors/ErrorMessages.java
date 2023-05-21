@@ -6,7 +6,7 @@ public class ErrorMessages {
   public static final String minimumPasswordLength = "Паролата трябва да бъде поне 8 символа!";
 
   public static final String invalidMobileNumberLength =
-      "Телефоният номер трябва да бъде 10 цифрен!";
+      "Телефоният номер трябва да бъде 10 цифрен и да започва с '0'!";
 
   public static final String invalidEmail = "Имейлът е невалиден! Моля, опитайте отново.";
 }

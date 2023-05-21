@@ -4,9 +4,12 @@ import com.example.library.dao.UserDao;
 import com.example.library.entities.User;
 import java.time.LocalDateTime;
 import java.util.List;
+import javafx.collections.FXCollections;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 public class UnassignedReaderController extends Controller {
@@ -25,6 +28,11 @@ public class UnassignedReaderController extends Controller {
   @FXML
   private TableColumn<User, LocalDateTime> createdAtColumn;
 
+  @FXML
+  private TextField searchFilterInput;
+
+  private FilteredList<User> filteredReaders;
+
   public void initialize() {
     // Set the cell value factories for each TableColumn
     nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -35,6 +43,7 @@ public class UnassignedReaderController extends Controller {
     formatDate(createdAtColumn);
 
     loadData();
+    setupSearchFilter();
   }
 
   private void loadData() {
@@ -42,9 +51,23 @@ public class UnassignedReaderController extends Controller {
       List<User> allUsers = new UserDao().getAllReaders();
       readers.getItems().clear();
 
-      readers.getItems().addAll(allUsers);
+      filteredReaders = new FilteredList<>(FXCollections.observableArrayList(allUsers));
+      readers.setItems(filteredReaders);
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+
+  private void setupSearchFilter() {
+    searchFilterInput.textProperty().addListener((observable, oldValue, newValue) -> {
+      filteredReaders.setPredicate(user -> {
+        if (newValue == null || newValue.isEmpty()) {
+          return true;
+        }
+
+        String lowercaseFilter = newValue.toLowerCase();
+        return user.getName().toLowerCase().contains(lowercaseFilter);
+      });
+    });
   }
 }

@@ -45,6 +45,8 @@ public class CreateUserController extends Controller {
   @FXML
   protected void OnCreateButtonClick()
       throws ValidationInputException, NoSuchAlgorithmException, IOException {
+
+    //TODO: Validate already existing user via email
     try {
       validateInputs();
       setNewUserInDatabase();
@@ -91,7 +93,7 @@ public class CreateUserController extends Controller {
   private void setNewUserInDatabase() throws NoSuchAlgorithmException, IOException {
     String hashPassword = HashPasswordHelper.hashPassword(passwordInput.getText());
     Role role = typeUser.getValue().equals("Читател") ? Role.READER : Role.ADMIN;
-    int phoneNumber = Integer.parseInt(mobileNumberInput.getText());
+    long phoneNumber = Long.parseLong(mobileNumberInput.getText());
 
     User newUser = new User(nameInput.getText(), addressTextArea.getText(),
         phoneNumber, emailInput.getText(), role,
