@@ -1,8 +1,10 @@
 package com.example.library.controllers;
 
+import com.example.library.MainApplication;
 import com.example.library.dao.BookDao;
 import com.example.library.entities.Book;
 import com.example.library.entities.User;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import javafx.collections.FXCollections;
@@ -59,6 +61,11 @@ public class ScrapBookController extends Controller {
       new BookDao().update(selectedBook);
       filteredBooks.getSource().remove(selectedBook);
     }
+  }
+
+  @FXML
+  void getBack() throws IOException {
+    MainApplication.changeScene("views/admin-operations.fxml", 520, 500);
   }
 
   public void initialize() {

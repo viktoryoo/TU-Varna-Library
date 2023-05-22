@@ -65,4 +65,9 @@ public class AdminOperationsController {
   protected void readersRatingReferences() throws IOException {
     MainApplication.changeScene("views/hello-view.fxml", 520, 500);
   }
+
+  @FXML
+  void getBack() throws IOException {
+    MainApplication.changeScene("views/login.fxml", 520, 400);
+  }
 }

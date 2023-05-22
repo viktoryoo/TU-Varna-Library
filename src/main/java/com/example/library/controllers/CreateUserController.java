@@ -54,6 +54,11 @@ public class CreateUserController extends Controller {
     }
   }
 
+  @FXML
+  void getBack() throws IOException {
+    MainApplication.changeScene("views/admin-operations.fxml", 520, 500);
+  }
+
   private void validateInputs() throws ValidationInputException {
     int passwordValidLength = 8;
     int minimumMobileNumberSize = 10;

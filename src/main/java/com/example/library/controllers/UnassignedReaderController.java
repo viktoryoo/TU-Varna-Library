@@ -1,7 +1,9 @@
 package com.example.library.controllers;
 
+import com.example.library.MainApplication;
 import com.example.library.dao.UserDao;
 import com.example.library.entities.User;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import javafx.collections.FXCollections;
@@ -41,6 +43,11 @@ public class UnassignedReaderController extends Controller {
       new UserDao().update(selectedUser);
       filteredReaders.getSource().remove(selectedUser);
     }
+  }
+
+  @FXML
+  void getBack() throws IOException {
+    MainApplication.changeScene("views/admin-operations.fxml", 520, 500);
   }
 
   public void initialize() {

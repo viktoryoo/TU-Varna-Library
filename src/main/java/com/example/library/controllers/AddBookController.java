@@ -49,6 +49,11 @@ public class AddBookController extends Controller {
     }
   }
 
+  @FXML
+  void getBack() throws IOException {
+    MainApplication.changeScene("views/admin-operations.fxml", 520, 500);
+  }
+
   public void initialize() {
     setInputTextFormat(InputFormat.ONLY_DIGITS, yearOfPublicationInput);
   }
