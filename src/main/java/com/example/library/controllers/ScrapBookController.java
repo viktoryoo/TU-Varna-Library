@@ -100,7 +100,18 @@ public class ScrapBookController extends Controller {
 
         String lowercaseFilter = newValue.toLowerCase();
 
-        return book.getTitle().toLowerCase().contains(lowercaseFilter);
+        if (book.getTitle().toLowerCase().contains(lowercaseFilter)) {
+          return true;
+        } else if (book.getAuthor().toLowerCase().contains(lowercaseFilter)) {
+          return true;
+        } else if (book.getPublisher().toLowerCase().contains(lowercaseFilter)) {
+          return true;
+        } else if (book.getGenre().toLowerCase().contains(lowercaseFilter)) {
+          return true;
+        }
+
+        // No match is found
+        return false;
       });
     });
   }
