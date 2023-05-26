@@ -73,7 +73,5 @@ public class AddBookController extends Controller {
         inventoryNumberInput.getText(),
         Integer.parseInt(quantityInput.getText()), LocalDateTime.now(), LocalDateTime.now());
     new BookDao().save(newBook);
-
-    MainApplication.changeScene("views/admin-operations.fxml", 520, 500);
   }
 }

@@ -104,7 +104,5 @@ public class CreateUserController extends Controller {
         phoneNumber, emailInput.getText(), role,
         hashPassword, true, LocalDateTime.now(), LocalDateTime.now());
     new UserDao().save(newUser);
-
-    MainApplication.changeScene("views/admin-operations.fxml", 520, 500);
   }
 }
