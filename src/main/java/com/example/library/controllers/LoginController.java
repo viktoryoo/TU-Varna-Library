@@ -6,12 +6,16 @@ import com.example.library.entities.User;
 import com.example.library.errors.ErrorMessages;
 import com.example.library.exceptions.ValidationInputException;
 import com.example.library.helpers.HashPasswordHelper;
-import java.security.NoSuchAlgorithmException;
-import java.util.Optional;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Optional;
 
 public class LoginController {
 
@@ -23,6 +27,8 @@ public class LoginController {
 
   @FXML
   private Label wrongCredentials;
+
+  private static final Logger logger = LogManager.getLogger(LoginController.class);
 
   @FXML
   protected void onLoginButtonClick() throws NoSuchAlgorithmException, ValidationInputException {
@@ -44,12 +50,14 @@ public class LoginController {
     try {
       //TODO: Check if is admin or reader
       if (newUser.isPresent()) {
-        MainApplication.changeScene("views/admin-operations.fxml", 520, 500);
+          MainApplication.changeScene("views/admin-operations.fxml", 520, 500);
+          logger.info("User {} logged in successfully!", newUser.get().getEmail());
       } else {
         wrongCredentials.setText("Грешен имейл или парола!");
+        logger.warn("Wrong credentials!");
       }
-    } catch (Exception e) {
-      e.printStackTrace();
+    } catch (IOException e) {
+      logger.error("Error while validating login: {}",  e.getMessage());
     }
   }
 }

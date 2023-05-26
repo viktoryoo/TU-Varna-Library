@@ -17,6 +17,7 @@ module com.example.library {
   requires org.hibernate.orm.core;
   requires jakarta.persistence;
   requires java.naming;
+  requires org.apache.logging.log4j;
 
   opens com.example.library.entities;
 }
