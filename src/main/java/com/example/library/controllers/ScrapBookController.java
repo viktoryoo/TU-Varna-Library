@@ -3,17 +3,22 @@ package com.example.library.controllers;
 import com.example.library.MainApplication;
 import com.example.library.dao.BookDao;
 import com.example.library.entities.Book;
+import com.example.library.entities.InputFormat;
 import com.example.library.entities.User;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Duration;
+import org.controlsfx.control.Notifications;
 
 public class ScrapBookController extends Controller {
   @FXML
@@ -51,15 +56,64 @@ public class ScrapBookController extends Controller {
 
   private FilteredList<Book> filteredBooks;
 
+  private int quantityToScrap;
+
   @FXML
   void scrapBook() {
     Book selectedBook = books.getSelectionModel().getSelectedItem();
     if (selectedBook != null) {
-      selectedBook.setAvailable(false);
-      selectedBook.setScraped(true);
-      selectedBook.setQuantity(0);
-      new BookDao().update(selectedBook);
-      filteredBooks.getSource().remove(selectedBook);
+      int currentQuantity = selectedBook.getQuantity();
+      showConfirmationModal(currentQuantity);
+
+      if (quantityToScrap != 0) {
+        int remainingQuantity = currentQuantity - quantityToScrap;
+
+        if (remainingQuantity > 0) {
+          selectedBook.setAvailable(true);
+          selectedBook.setQuantity(remainingQuantity);
+          new BookDao().update(selectedBook);
+
+          for (Book book : filteredBooks) {
+            if (book.equals(selectedBook)) {
+              book.setQuantity(remainingQuantity);
+              break;
+            }
+          }
+
+          books.refresh();
+        } else if (remainingQuantity == 0) {
+          selectedBook.setAvailable(false);
+          selectedBook.setQuantity(remainingQuantity);
+          new BookDao().update(selectedBook);
+          filteredBooks.getSource().remove(selectedBook);
+        }
+      }
+    }
+  }
+
+  private void showConfirmationModal(int currentQuantity) {
+    TextInputDialog modal = new TextInputDialog();
+    TextField inputField = modal.getEditor();
+    setInputTextFormat(InputFormat.ONLY_DIGITS, inputField);
+    modal.setTitle("Количество");
+    modal.setHeaderText("Колко броя книги желаете да бракувате?");
+    modal.setContentText("Брой книги:");
+
+    Optional<String> result = modal.showAndWait();
+
+    if (result.isPresent() && !result.get().isBlank()) {
+      int providedQuantity = Integer.valueOf(result.get());
+
+      if (providedQuantity <= currentQuantity) {
+        quantityToScrap = providedQuantity;
+      } else {
+        // Show notification for exceeded quantity
+        Notifications.create()
+            .title("Надвишено количество")
+            .text("Предоставеното количество надвишава броя на книгите")
+            .hideAfter(Duration.seconds(5)) // Duration to display the notification (optional)
+            .showWarning();
+      }
     }
   }
 
