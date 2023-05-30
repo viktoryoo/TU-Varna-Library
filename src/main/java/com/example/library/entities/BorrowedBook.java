@@ -20,6 +20,7 @@ public class BorrowedBook {
   private int readerId;
   private LocalDate loanDate;
   private LocalDate returnDate;
+  private boolean isReturned;
 
 
   @CreationTimestamp
@@ -28,12 +29,16 @@ public class BorrowedBook {
   @UpdateTimestamp
   private LocalDateTime updatedAt;
 
-  public BorrowedBook(Integer id, int bookId, int readerId, LocalDate loanDate, LocalDate returnDate, LocalDateTime createdAt, LocalDateTime updatedAt) {
+  public BorrowedBook() {
+  }
+
+  public BorrowedBook(Integer id, int bookId, int readerId, LocalDate loanDate, LocalDate returnDate, boolean isReturned, LocalDateTime createdAt, LocalDateTime updatedAt) {
     this.id = id;
     this.bookId = bookId;
     this.readerId = readerId;
     this.loanDate = loanDate;
     this.returnDate = returnDate;
+    this.isReturned = isReturned;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
@@ -93,5 +98,13 @@ public class BorrowedBook {
 
   public void setUpdatedAt(LocalDateTime updatedAt) {
     this.updatedAt = updatedAt;
+  }
+
+  public boolean isReturned() {
+    return isReturned;
+  }
+
+  public void setReturned(boolean returned) {
+    isReturned = returned;
   }
 }

@@ -6,12 +6,14 @@ import com.example.library.entities.Book;
 import com.example.library.entities.InputFormat;
 import com.example.library.errors.ErrorMessages;
 import com.example.library.exceptions.ValidationInputException;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.time.LocalDateTime;
+import com.example.library.helpers.ServiceLocator;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.time.LocalDateTime;
 
 public class AddBookController extends Controller {
 
@@ -38,6 +40,7 @@ public class AddBookController extends Controller {
 
   @FXML
   private Label validationMessage;
+  private final BookDao bookDao = ServiceLocator.getInstance().getBookDao();
 
   @FXML
   protected void onAddButtonClick()
@@ -72,6 +75,6 @@ public class AddBookController extends Controller {
         publisherInput.getText(), Integer.parseInt(yearOfPublicationInput.getText()), true, false,
         inventoryNumberInput.getText(),
         Integer.parseInt(quantityInput.getText()), LocalDateTime.now(), LocalDateTime.now());
-    new BookDao().save(newBook);
+    bookDao.save(newBook);
   }
 }

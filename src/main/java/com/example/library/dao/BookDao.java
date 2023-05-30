@@ -15,7 +15,7 @@ public class BookDao implements Dao<Book> {
 
   @Override
   public Optional<Book> get(long id) {
-    return Optional.empty();
+   return Optional.ofNullable(entityManager.find(Book.class, id));
   }
 
   @Override

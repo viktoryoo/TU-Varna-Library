@@ -2,12 +2,14 @@ package com.example.library.dao;
 
 import com.example.library.entities.Role;
 import com.example.library.entities.User;
-import java.time.LocalDateTime;
+import com.example.library.helpers.ServiceLocator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
+
 class UserDaoTest {
-    UserDao userDao = new UserDao();
+    UserDao userDao = ServiceLocator.getInstance().getUserDao();
 
     @Test
     void getAll() {

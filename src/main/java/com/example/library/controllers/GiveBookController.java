@@ -7,16 +7,21 @@ import com.example.library.helpers.ServiceLocator;
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class UnassignedReaderController extends Controller {
+public class GiveBookController extends Controller {
+
   @FXML
   private TableView<User> readers;
 
@@ -36,25 +41,34 @@ public class UnassignedReaderController extends Controller {
   private TextField searchFilterInput;
 
   private FilteredList<User> filteredReaders;
-  private final UserDao userDao = ServiceLocator.getInstance().getUserDao();
 
-  @FXML
-  void removeReader() {
-    User selectedUser = readers.getSelectionModel().getSelectedItem();
-    if (selectedUser != null) {
-      selectedUser.setIsAssign(false);
-      userDao.update(selectedUser);
-      filteredReaders.getSource().remove(selectedUser);
-    }
-  }
+  private int selectedUserId;
+  private UserDao userDao = ServiceLocator.getInstance().getUserDao();
 
   @FXML
   void getBack() throws IOException {
     MainApplication.changeScene("views/admin-operations.fxml", 520, 500);
   }
 
+  @FXML
+  void giveBook() throws IOException {
+    User selectedUser = readers.getSelectionModel().getSelectedItem();
+    selectedUserId = selectedUser.getId();
+
+    // Load the target view FXML file
+    FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("views/book-selection.fxml"));
+    Parent root = loader.load();
+    // Get the controller of the target view
+    BookSelectionController bookSelectionController = loader.getController();
+    bookSelectionController.setReaderId(selectedUserId);
+    // Create a new scene with the target view
+    Scene scene = new Scene(root);
+    // Get the current stage and set the new scene
+    Stage stage = (Stage) searchFilterInput.getScene().getWindow();
+    stage.setScene(scene);
+  }
+
   public void initialize() {
-    // Set the cell value factories for each TableColumn
     nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
     emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
     phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));

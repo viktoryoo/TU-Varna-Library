@@ -11,7 +11,23 @@
 <?import javafx.scene.text.Font?>
 
 <BorderPane prefHeight="500.0" prefWidth="520.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.library.controllers.AdminOperationsController">
-  <right>
+  <left>
+    <AnchorPane prefHeight="407.0" prefWidth="228.0" style="-fx-background-color: #263F73;" BorderPane.alignment="CENTER">
+      <children>
+        <Label alignment="CENTER" layoutX="33.0" layoutY="110.0" prefWidth="164.0" text="Библиотека" textFill="WHITE">
+          <font>
+            <Font name="Verdana Bold Italic" size="24.0" />
+          </font>
+        </Label>
+        <ImageView fitHeight="140.0" fitWidth="164.0" layoutX="32.0" layoutY="154.0" pickOnBounds="true" preserveRatio="true">
+          <image>
+            <Image url="@../images/istockphoto-1354989842-170667a.jpg" />
+          </image>
+        </ImageView>
+      </children>
+    </AnchorPane>
+  </left>
+   <center>
     <AnchorPane prefHeight="400.0" prefWidth="294.0" BorderPane.alignment="CENTER">
       <children>
         <Label alignment="CENTER" layoutX="53.0" layoutY="14.0" prefHeight="46.0" prefWidth="211.0" text="Операции">
@@ -56,47 +72,37 @@
             <Font name="Verdana Bold" size="18.0" />
           </font>
         </Label>
-        <Hyperlink layoutX="45.0" layoutY="236.0" onAction="#rentBooks" text="Заемане на книга">
+        <Hyperlink layoutX="42.0" layoutY="239.0" onAction="#scrapBooks" text="Бракуване на книга">
           <font>
             <Font name="Verdana Italic" size="13.0" />
           </font>
         </Hyperlink>
-        <Hyperlink layoutX="43.0" layoutY="258.0" onAction="#returnBooks" text="Връщане на книга">
+        <Hyperlink layoutX="42.0" layoutY="261.0" onAction="#archiveBooks" text="Архивиране на книга">
           <font>
             <Font name="Verdana Italic" size="13.0" />
           </font>
         </Hyperlink>
-        <Hyperlink layoutX="42.0" layoutY="281.0" onAction="#scrapBooks" text="Бракуване на книга">
-          <font>
-            <Font name="Verdana Italic" size="13.0" />
-          </font>
-        </Hyperlink>
-        <Hyperlink layoutX="41.0" layoutY="306.0" onAction="#archiveBooks" text="Архивиране на книга">
-          <font>
-            <Font name="Verdana Italic" size="13.0" />
-          </font>
-        </Hyperlink>
-        <Label layoutX="41.0" layoutY="328.0" prefHeight="46.0" prefWidth="224.0" text="Справки:">
+        <Label layoutX="41.0" layoutY="278.0" prefHeight="46.0" prefWidth="224.0" text="Справки:">
           <font>
             <Font name="Verdana Bold" size="18.0" />
           </font>
         </Label>
-        <Hyperlink layoutX="41.0" layoutY="363.0" onAction="#countReferences" text="Подадени формуляри">
+        <Hyperlink layoutX="41.0" layoutY="313.0" onAction="#countReferences" text="Подадени формуляри">
           <font>
             <Font name="Verdana Italic" size="13.0" />
           </font>
         </Hyperlink>
-        <Hyperlink layoutX="41.0" layoutY="385.0" onAction="#booksReferences" text="Книги">
+        <Hyperlink layoutX="41.0" layoutY="335.0" onAction="#booksReferences" text="Книги">
           <font>
             <Font name="Verdana Italic" size="13.0" />
           </font>
         </Hyperlink>
-        <Hyperlink layoutX="43.0" layoutY="407.0" onAction="#readersReferences" text="Потребители">
+        <Hyperlink layoutX="43.0" layoutY="357.0" onAction="#readersReferences" text="Потребители">
           <font>
             <Font name="Verdana Italic" size="13.0" />
           </font>
         </Hyperlink>
-        <Hyperlink layoutX="43.0" layoutY="429.0" onAction="#readersRatingReferences" text="Рейтинг на потребители">
+        <Hyperlink layoutX="43.0" layoutY="379.0" onAction="#readersRatingReferences" text="Рейтинг на потребители">
           <font>
             <Font name="Verdana Italic" size="13.0" />
           </font>
@@ -108,21 +114,5 @@
             </Hyperlink>
       </children>
     </AnchorPane>
-  </right>
-  <left>
-    <AnchorPane prefHeight="407.0" prefWidth="228.0" style="-fx-background-color: #263F73;" BorderPane.alignment="CENTER">
-      <children>
-        <Label alignment="CENTER" layoutX="33.0" layoutY="110.0" prefWidth="164.0" text="Библиотека" textFill="WHITE">
-          <font>
-            <Font name="Verdana Bold Italic" size="24.0" />
-          </font>
-        </Label>
-        <ImageView fitHeight="140.0" fitWidth="164.0" layoutX="32.0" layoutY="154.0" pickOnBounds="true" preserveRatio="true">
-          <image>
-            <Image url="@../images/istockphoto-1354989842-170667a.jpg" />
-          </image>
-        </ImageView>
-      </children>
-    </AnchorPane>
-  </left>
+   </center>
 </BorderPane>

@@ -23,6 +23,7 @@ public class Book {
   private boolean isScraped;
   private String inventoryNumber;
   private int quantity;
+  private int borrowedQuantity;
 
   @CreationTimestamp
   private LocalDateTime createdAt;
@@ -144,5 +145,17 @@ public class Book {
 
   public void setId(Integer id) {
     this.id = id;
+  }
+
+  public boolean isScraped() {
+    return isScraped;
+  }
+
+  public int getBorrowedQuantity() {
+    return borrowedQuantity;
+  }
+
+  public void setBorrowedQuantity(int borrowedQuantity) {
+    this.borrowedQuantity = borrowedQuantity;
   }
 }

@@ -9,15 +9,13 @@ import com.example.library.entities.User;
 import com.example.library.errors.ErrorMessages;
 import com.example.library.exceptions.ValidationInputException;
 import com.example.library.helpers.HashPasswordHelper;
+import com.example.library.helpers.ServiceLocator;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
-import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 
 public class CreateUserController extends Controller {
 
@@ -41,6 +39,7 @@ public class CreateUserController extends Controller {
 
   @FXML
   private Label validationMessage;
+  private final UserDao userDao = ServiceLocator.getInstance().getUserDao();
 
   @FXML
   protected void OnCreateButtonClick()
@@ -103,6 +102,6 @@ public class CreateUserController extends Controller {
     User newUser = new User(nameInput.getText(), addressTextArea.getText(),
         phoneNumber, emailInput.getText(), role,
         hashPassword, true, LocalDateTime.now(), LocalDateTime.now());
-    new UserDao().save(newUser);
+    userDao.save(newUser);
   }
 }

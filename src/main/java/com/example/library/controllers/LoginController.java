@@ -6,6 +6,7 @@ import com.example.library.entities.User;
 import com.example.library.errors.ErrorMessages;
 import com.example.library.exceptions.ValidationInputException;
 import com.example.library.helpers.HashPasswordHelper;
+import com.example.library.helpers.ServiceLocator;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -29,6 +30,7 @@ public class LoginController {
   private Label wrongCredentials;
 
   private static final Logger logger = LogManager.getLogger(LoginController.class);
+  private UserDao userDao = ServiceLocator.getInstance().getUserDao();
 
   @FXML
   protected void onLoginButtonClick() throws NoSuchAlgorithmException, ValidationInputException {
@@ -45,7 +47,7 @@ public class LoginController {
     }
 
     String cryptedPassword = HashPasswordHelper.hashPassword(passwordInput.getText());
-    Optional<User> newUser = new UserDao().findUser(emailInput.getText(), cryptedPassword);
+    Optional<User> newUser = userDao.findUser(emailInput.getText(), cryptedPassword);
 
     try {
       //TODO: Check if is admin or reader

@@ -2,8 +2,9 @@ package com.example.library.controllers;
 
 import com.example.library.MainApplication;
 import com.example.library.dao.BookDao;
+import com.example.library.dao.BorrowedBookDao;
 import com.example.library.entities.Book;
-import com.example.library.entities.InputFormat;
+import com.example.library.entities.BorrowedBook;
 import com.example.library.entities.User;
 import com.example.library.helpers.ServiceLocator;
 import javafx.collections.FXCollections;
@@ -12,17 +13,17 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.Duration;
-import org.controlsfx.control.Notifications;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
-public class ScrapBookController extends Controller {
+public class BookSelectionController extends Controller {
   @FXML
   private TableView<Book> books;
 
@@ -48,6 +49,9 @@ public class ScrapBookController extends Controller {
   private TableColumn<Book, Integer> quantityColumn;
 
   @FXML
+  private TableColumn<Book, Integer> borrowedQuantityColumn;
+
+  @FXML
   private TableColumn<User, LocalDateTime> createdAtColumn;
 
   @FXML
@@ -58,66 +62,52 @@ public class ScrapBookController extends Controller {
 
   private FilteredList<Book> filteredBooks;
 
-  private int quantityToScrap;
+  private Integer readerId;
+  private final BorrowedBookDao borrowedBookDao = ServiceLocator.getInstance().getBorrowedBookDao();
   private final BookDao bookDao = ServiceLocator.getInstance().getBookDao();
+  private static final Logger logger = LogManager.getLogger(BookSelectionController.class);
+
 
   @FXML
-  void scrapBook() {
+  void giveBook() {
     Book selectedBook = books.getSelectionModel().getSelectedItem();
-    if (selectedBook != null) {
-      int currentQuantity = selectedBook.getQuantity();
-      showConfirmationModal(currentQuantity);
+    if (Objects.isNull(selectedBook)) {
+      logger.info(String.format("User %s tried to borrow a book, but no book was selected.", this.readerId));
+      return;
+    }
 
-      if (quantityToScrap != 0) {
-        int remainingQuantity = currentQuantity - quantityToScrap;
+    if (selectedBook.getQuantity() <= selectedBook.getBorrowedQuantity()) {
+        showAlert("Няма налични бройки от тази книга!", "Моля, изберете друга книга.");
+        logger.info(String.format("User %s tried to borrow book %s, but there are no available copies.",
+            this.readerId, selectedBook.getId()));
+        return;
+    }
 
-        if (remainingQuantity > 0) {
-          selectedBook.setAvailable(true);
-          selectedBook.setQuantity(remainingQuantity);
-          bookDao.update(selectedBook);
+    List<BorrowedBook> userBorrowedBooks = borrowedBookDao.getAllByReaderId(this.readerId);
+    if (userBorrowedBooks.stream().anyMatch(borrowedBook -> borrowedBook.getBookId() == selectedBook.getId())) {
+      showAlert("Читателят вече е взел тази книга!", "Моля, изберете друга книга.");
+      logger.info(String.format("User %s tried to borrow book %s, but already has it.", this.readerId, selectedBook.getId()));
+      return;
+    }
 
-          for (Book book : filteredBooks) {
-            if (book.equals(selectedBook)) {
-              book.setQuantity(remainingQuantity);
-              break;
-            }
-          }
-
-          books.refresh();
-        } else if (remainingQuantity == 0) {
-          selectedBook.setAvailable(false);
-          selectedBook.setQuantity(remainingQuantity);
-          bookDao.update(selectedBook);
-          filteredBooks.getSource().remove(selectedBook);
-        }
-      }
+    showDateInputDialog("Изберете срок за връщане", "Изберете краен срок за връщане на книгата 15 или 30 дни.",
+        "Срок на отдаване (дни):");
+    if (returnDate != null) {
+      BorrowedBook borrowedBook = new BorrowedBook(null, selectedBook.getId(), this.readerId,
+          LocalDate.now(), returnDate, false, LocalDateTime.now(), LocalDateTime.now());
+      borrowedBookDao.save(borrowedBook);
+      bookDao.get(selectedBook.getId()).ifPresent(book -> {
+        book.setBorrowedQuantity(book.getBorrowedQuantity() + 1);
+        bookDao.update(book);
+      });
+      refreshTable();
+      logger.info(String.format("User %s borrowed book %s.", this.readerId, selectedBook.getId()));
     }
   }
 
-  private void showConfirmationModal(int currentQuantity) {
-    TextInputDialog modal = new TextInputDialog();
-    TextField inputField = modal.getEditor();
-    setInputTextFormat(InputFormat.ONLY_DIGITS, inputField);
-    modal.setTitle("Количество");
-    modal.setHeaderText("Колко броя книги желаете да бракувате?");
-    modal.setContentText("Брой книги:");
-
-    Optional<String> result = modal.showAndWait();
-
-    if (result.isPresent() && !result.get().isBlank()) {
-      int providedQuantity = Integer.valueOf(result.get());
-
-      if (providedQuantity <= currentQuantity) {
-        quantityToScrap = providedQuantity;
-      } else {
-        // Show notification for exceeded quantity
-        Notifications.create()
-            .title("Надвишено количество")
-            .text("Предоставеното количество надвишава броя на книгите")
-            .hideAfter(Duration.seconds(5)) // Duration to display the notification (optional)
-            .showWarning();
-      }
-    }
+  private void refreshTable() {
+    loadData();
+    setupSearchFilter();
   }
 
   @FXML
@@ -133,6 +123,7 @@ public class ScrapBookController extends Controller {
     publisherColumn.setCellValueFactory(new PropertyValueFactory<>("publisher"));
     yearOfPublicationColumn.setCellValueFactory(new PropertyValueFactory<>("yearOfPublication"));
     quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+    borrowedQuantityColumn.setCellValueFactory(new PropertyValueFactory<>("borrowedQuantity"));
     createdAtColumn.setCellValueFactory(new PropertyValueFactory<>("createdAt"));
     updatedAtColumn.setCellValueFactory(new PropertyValueFactory<>("updatedAt"));
 
@@ -146,12 +137,11 @@ public class ScrapBookController extends Controller {
   private void loadData() {
     try {
       List<Book> allBooks = bookDao.getAllAvailable();
-
       filteredBooks = new FilteredList<>(FXCollections.observableArrayList(allBooks));
       books.setItems(filteredBooks);
       books.refresh();
-    } catch (Exception e) {
-      e.printStackTrace();
+  } catch (Exception e) {
+      logger.error("Error while loading books.", e);
     }
   }
 
@@ -178,5 +168,9 @@ public class ScrapBookController extends Controller {
         return false;
       });
     });
+  }
+
+  public void setReaderId(Integer readerId) {
+    this.readerId = readerId;
   }
 }

@@ -1,11 +1,12 @@
 package com.example.library.dao;
 
 import com.example.library.entities.Book;
+import com.example.library.helpers.ServiceLocator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class BookDaoTest {
-    private BookDao bookDao = new BookDao();
+    private BookDao bookDao = ServiceLocator.getInstance().getBookDao();
 
     @Test
     void getAll() {

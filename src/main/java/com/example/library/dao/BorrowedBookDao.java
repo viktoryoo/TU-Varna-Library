@@ -12,40 +12,46 @@ import java.util.function.Consumer;
 
 public class BorrowedBookDao implements Dao<BorrowedBook> {
 
-    private EntityManager entityManager = HibernateUtil.getEntityManager();
+  private EntityManager entityManager = HibernateUtil.getEntityManager();
 
-    @Override
-    public Optional<BorrowedBook> get(long id) {
-        return Optional.empty();
+  @Override
+  public Optional<BorrowedBook> get(long id) {
+    return Optional.empty();
+  }
+
+  @Override
+  public List<BorrowedBook> getAll() {
+    Query query = entityManager.createQuery("SELECT b FROM BorrowedBook b");
+    return query.getResultList();
+  }
+
+  @Override
+  public void save(BorrowedBook borrowedBook) {
+    executeInsideTransaction(entityManager -> entityManager.persist(borrowedBook));
+  }
+
+  @Override
+  public void delete(BorrowedBook borrowedBook) {
+    executeInsideTransaction(entityManager -> entityManager.remove(borrowedBook));
+  }
+
+  private void executeInsideTransaction(Consumer<EntityManager> action) {
+    EntityTransaction tx = entityManager.getTransaction();
+    try {
+      tx.begin();
+      action.accept(entityManager);
+      tx.commit();
+    } catch (RuntimeException e) {
+      tx.rollback();
+      throw e;
     }
+  }
 
-    @Override
-    public List<BorrowedBook> getAll() {
-        Query query = entityManager.createQuery("SELECT b FROM BorrowedBook b");
-        return query.getResultList();
-    }
-
-    @Override
-    public void save(BorrowedBook borrowedBook) {
-        executeInsideTransaction(entityManager -> entityManager.persist(borrowedBook));
-    }
-
-    @Override
-    public void delete(BorrowedBook borrowedBook) {
-        executeInsideTransaction(entityManager -> entityManager.remove(borrowedBook));
-    }
-
-
-    private void executeInsideTransaction(Consumer<EntityManager> action) {
-        EntityTransaction tx = entityManager.getTransaction();
-        try {
-            tx.begin();
-            action.accept(entityManager);
-            tx.commit();
-        } catch (RuntimeException e) {
-            tx.rollback();
-            throw e;
-        }
-    }
-
+  public List<BorrowedBook> getAllByReaderId(int readerId) {
+    Query query =
+        entityManager.createQuery(
+            "SELECT b FROM BorrowedBook b WHERE b.readerId = :readerId AND b.isReturned = false");
+    query.setParameter("readerId", readerId);
+    return query.getResultList();
+  }
 }
