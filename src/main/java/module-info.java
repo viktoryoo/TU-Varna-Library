@@ -20,4 +20,6 @@ module com.example.library {
   requires org.apache.logging.log4j;
 
   opens com.example.library.entities;
+  opens com.example.library.dto;
+  opens com.example.library.mappers;
 }

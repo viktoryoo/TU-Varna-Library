@@ -4,6 +4,9 @@ import com.example.library.MainApplication;
 import com.example.library.dao.UserDao;
 import com.example.library.entities.User;
 import com.example.library.helpers.ServiceLocator;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
@@ -16,11 +19,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.List;
-
-public class GiveBookController extends Controller {
+public class ReturnBookController extends Controller {
 
   @FXML
   private TableView<User> readers;
@@ -51,16 +50,17 @@ public class GiveBookController extends Controller {
   }
 
   @FXML
-  void giveBook() throws IOException {
+  void returnBook() throws IOException {
     User selectedUser = readers.getSelectionModel().getSelectedItem();
     selectedUserId = selectedUser.getId();
 
     // Load the target view FXML file
-    FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("views/book-selection.fxml"));
+    FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("views/return-book-selection.fxml"));
     Parent root = loader.load();
     // Get the controller of the target view
-    BookSelectionController bookSelectionController = loader.getController();
+    ReturnBookSelectionController bookSelectionController = loader.getController();
     bookSelectionController.setReaderId(selectedUserId);
+    bookSelectionController.refreshTable();
     // Create a new scene with the target view
     Scene scene = new Scene(root);
     // Get the current stage and set the new scene

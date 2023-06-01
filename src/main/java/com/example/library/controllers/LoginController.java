@@ -33,8 +33,9 @@ public class LoginController {
   private UserDao userDao = ServiceLocator.getInstance().getUserDao();
 
   @FXML
-  protected void onLoginButtonClick() throws NoSuchAlgorithmException, ValidationInputException {
+  protected void onLoginButtonClick() throws NoSuchAlgorithmException, ValidationInputException, IOException {
     validateLogin();
+    MainApplication.changeScene("views/admin-operations.fxml", 520, 500);
   }
 
   public void validateLogin() throws NoSuchAlgorithmException, ValidationInputException {

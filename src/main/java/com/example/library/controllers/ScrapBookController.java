@@ -136,8 +136,8 @@ public class ScrapBookController extends Controller {
     createdAtColumn.setCellValueFactory(new PropertyValueFactory<>("createdAt"));
     updatedAtColumn.setCellValueFactory(new PropertyValueFactory<>("updatedAt"));
 
-    formatDate(createdAtColumn);
-    formatDate(updatedAtColumn);
+    formatLocalDateTime(createdAtColumn);
+    formatLocalDateTime(updatedAtColumn);
 
     loadData();
     setupSearchFilter();

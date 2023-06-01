@@ -60,7 +60,7 @@ public class UnassignedReaderController extends Controller {
     phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
     createdAtColumn.setCellValueFactory(new PropertyValueFactory<>("createdAt"));
 
-    formatDate(createdAtColumn);
+    formatLocalDateTime(createdAtColumn);
 
     loadData();
     setupSearchFilter();

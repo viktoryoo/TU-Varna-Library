@@ -5,7 +5,6 @@ import com.example.library.util.HibernateUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -54,4 +53,18 @@ public class BorrowedBookDao implements Dao<BorrowedBook> {
     query.setParameter("readerId", readerId);
     return query.getResultList();
   }
+
+  public Optional<BorrowedBook> getBorrowedReaderId(Integer readerId, Integer bookId) {
+    Query query =
+        entityManager.createQuery(
+            "SELECT b FROM BorrowedBook b WHERE b.readerId = :readerId AND b.bookId = :bookId AND b.isReturned = false");
+    query.setParameter("readerId", readerId);
+    query.setParameter("bookId", bookId);
+    return query.getResultList().stream().findFirst();
+  }
+
+  public void update(BorrowedBook book) {
+    executeInsideTransaction(entityManager -> entityManager.merge(book));
+  }
+
 }

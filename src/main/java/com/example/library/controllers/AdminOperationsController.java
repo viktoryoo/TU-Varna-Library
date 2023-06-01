@@ -33,7 +33,7 @@ public class AdminOperationsController {
 
   @FXML
   protected void returnBooks() throws IOException {
-    MainApplication.changeScene("views/hello-view.fxml", 520, 500);
+    MainApplication.changeScene("views/return-book.fxml", 620, 600);
   }
 
   @FXML

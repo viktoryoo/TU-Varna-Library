@@ -3,10 +3,17 @@ package com.example.library.controllers;
 import com.example.library.MainApplication;
 import com.example.library.dao.BookDao;
 import com.example.library.dao.BorrowedBookDao;
+import com.example.library.dto.UserBook;
 import com.example.library.entities.Book;
 import com.example.library.entities.BorrowedBook;
 import com.example.library.entities.User;
 import com.example.library.helpers.ServiceLocator;
+import com.example.library.mappers.UserBookMapper;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
@@ -17,15 +24,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
-
-public class BookSelectionController extends Controller {
+public class ReturnBookSelectionController extends Controller {
   @FXML
-  private TableView<Book> books;
+  private TableView<UserBook> books;
 
   @FXML
   private TableColumn<Book, String> inventoryNumberColumn;
@@ -52,61 +53,59 @@ public class BookSelectionController extends Controller {
   private TableColumn<Book, Integer> borrowedQuantityColumn;
 
   @FXML
-  private TableColumn<User, LocalDateTime> createdAtColumn;
+  private TableColumn<User, LocalDateTime> loanDateColumn;
 
   @FXML
-  private TableColumn<User, LocalDateTime> updatedAtColumn;
+  private TableColumn<User, LocalDateTime> returnDateColumn;
 
   @FXML
   private TextField searchFilterInput;
 
-  private FilteredList<Book> filteredBooks;
+  private FilteredList<UserBook> filteredBooks;
 
   private Integer readerId;
   private final BorrowedBookDao borrowedBookDao = ServiceLocator.getInstance().getBorrowedBookDao();
   private final BookDao bookDao = ServiceLocator.getInstance().getBookDao();
-  private static final Logger logger = LogManager.getLogger(BookSelectionController.class);
+  private static final Logger logger = LogManager.getLogger(ReturnBookSelectionController.class);
 
 
   @FXML
   void giveBook() {
-    Book selectedBook = books.getSelectionModel().getSelectedItem();
+    UserBook selectedBook = books.getSelectionModel().getSelectedItem();
     if (Objects.isNull(selectedBook)) {
-      showAlert("Грешна операция!", "Потребителят се пробва да извърши операция преди да е избрал елемент.");
       logger.info(String.format("User %s tried to borrow a book, but no book was selected.", this.readerId));
       return;
     }
 
-    if (selectedBook.getQuantity() <= selectedBook.getBorrowedQuantity()) {
-        showAlert("Няма налични бройки от тази книга!", "Моля, изберете друга книга.");
-        logger.info(String.format("User %s tried to borrow book %s, but there are no available copies.",
-            this.readerId, selectedBook.getId()));
-        return;
-    }
-
-    List<BorrowedBook> userBorrowedBooks = borrowedBookDao.getAllByReaderId(this.readerId);
-    if (userBorrowedBooks.stream().anyMatch(borrowedBook -> borrowedBook.getBookId() == selectedBook.getId())) {
-      showAlert("Читателят вече е взел тази книга!", "Моля, изберете друга книга.");
-      logger.info(String.format("User %s tried to borrow book %s, but already has it.", this.readerId, selectedBook.getId()));
+    Optional<BorrowedBook> userBorrowedBooks = borrowedBookDao.getBorrowedReaderId(this.readerId, selectedBook.getId());
+    if (userBorrowedBooks.isEmpty()) {
+      logger.info(String.format("User %s tried to return book %s, but has not borrowed it.", this.readerId, selectedBook.getId()));
       return;
     }
 
-    showDateInputDialog("Изберете срок за връщане", "Изберете краен срок за връщане на книгата 15 или 30 дни.",
-        "Срок на отдаване (дни):");
-    if (returnDate != null) {
-      BorrowedBook borrowedBook = new BorrowedBook(null, selectedBook.getId(), this.readerId,
-          LocalDate.now(), returnDate, false, LocalDateTime.now(), LocalDateTime.now());
-      borrowedBookDao.save(borrowedBook);
-      bookDao.get(selectedBook.getId()).ifPresent(book -> {
-        book.setBorrowedQuantity(book.getBorrowedQuantity() + 1);
-        bookDao.update(book);
-      });
-      refreshTable();
-      logger.info(String.format("User %s borrowed book %s.", this.readerId, selectedBook.getId()));
-    }
+    updateBooks(selectedBook, userBorrowedBooks);
+    refreshTable();
   }
 
-  private void refreshTable() {
+  private boolean updateBooks(UserBook selectedBook, Optional<BorrowedBook> userBorrowedBooks) {
+    BorrowedBook borrowedBook = userBorrowedBooks.get();
+    borrowedBook.setReturned(true);
+    borrowedBookDao.update(borrowedBook);
+
+    Optional<Book> book = bookDao.get(selectedBook.getId());
+    if (book.isEmpty()) {
+      logger.info(String.format("User %s tried to return book %s, but it does not exist.", this.readerId, selectedBook.getId()));
+      return true;
+    }
+
+    Book returnedBook = book.get();
+    returnedBook.setQuantity(returnedBook.getQuantity() + 1);
+    returnedBook.setBorrowedQuantity(returnedBook.getBorrowedQuantity() - 1);
+    bookDao.update(returnedBook);
+    return false;
+  }
+
+  void refreshTable() {
     loadData();
     setupSearchFilter();
   }
@@ -123,21 +122,32 @@ public class BookSelectionController extends Controller {
     genreColumn.setCellValueFactory(new PropertyValueFactory<>("genre"));
     publisherColumn.setCellValueFactory(new PropertyValueFactory<>("publisher"));
     yearOfPublicationColumn.setCellValueFactory(new PropertyValueFactory<>("yearOfPublication"));
-    quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
-    borrowedQuantityColumn.setCellValueFactory(new PropertyValueFactory<>("borrowedQuantity"));
-    createdAtColumn.setCellValueFactory(new PropertyValueFactory<>("createdAt"));
-    updatedAtColumn.setCellValueFactory(new PropertyValueFactory<>("updatedAt"));
+    loanDateColumn.setCellValueFactory(new PropertyValueFactory<>("loanDate"));
+    returnDateColumn.setCellValueFactory(new PropertyValueFactory<>("returnDate"));
 
-    formatLocalDateTime(createdAtColumn);
-    formatLocalDateTime(updatedAtColumn);
+    formatLocalDate(loanDateColumn);
+    formatLocalDate(returnDateColumn);
 
     loadData();
     setupSearchFilter();
   }
 
   private void loadData() {
+    if (readerId == null) {
+      return;
+    }
     try {
-      List<Book> allBooks = bookDao.getAllAvailable();
+      List<UserBook> allBooks = borrowedBookDao.getAllByReaderId(readerId).stream()
+          .map(borrowedBook -> {
+            var optional = bookDao.get(borrowedBook.getBookId());
+            if (optional.isPresent()) {
+              Book book = optional.get();
+              return UserBookMapper.toUserBook(book, borrowedBook);
+            }
+            return null;
+          })
+          .filter(Objects::nonNull)
+          .toList();
       filteredBooks = new FilteredList<>(FXCollections.observableArrayList(allBooks));
       books.setItems(filteredBooks);
       books.refresh();
