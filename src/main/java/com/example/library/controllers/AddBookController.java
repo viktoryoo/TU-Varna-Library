@@ -4,6 +4,7 @@ import com.example.library.MainApplication;
 import com.example.library.dao.BookDao;
 import com.example.library.entities.Book;
 import com.example.library.entities.InputFormat;
+import com.example.library.entities.NotificationType;
 import com.example.library.errors.ErrorMessages;
 import com.example.library.exceptions.ValidationInputException;
 import com.example.library.helpers.ServiceLocator;
@@ -48,6 +49,7 @@ public class AddBookController extends Controller {
     try {
       validateInputs();
       setNewBookInDatabase();
+      showNotification("Успешно добавихте нова книга", NotificationType.SUCCESS);
     } catch (ValidationInputException | NoSuchAlgorithmException | IOException e) {
     }
   }

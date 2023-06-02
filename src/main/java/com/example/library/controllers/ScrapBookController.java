@@ -4,8 +4,13 @@ import com.example.library.MainApplication;
 import com.example.library.dao.BookDao;
 import com.example.library.entities.Book;
 import com.example.library.entities.InputFormat;
+import com.example.library.entities.NotificationType;
 import com.example.library.entities.User;
 import com.example.library.helpers.ServiceLocator;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
@@ -14,13 +19,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.Duration;
-import org.controlsfx.control.Notifications;
-
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 
 public class ScrapBookController extends Controller {
   @FXML
@@ -75,6 +73,7 @@ public class ScrapBookController extends Controller {
           selectedBook.setAvailable(true);
           selectedBook.setQuantity(remainingQuantity);
           bookDao.update(selectedBook);
+          showNotification("Успешно бракувахте книга", NotificationType.SUCCESS);
 
           for (Book book : filteredBooks) {
             if (book.equals(selectedBook)) {
@@ -111,11 +110,8 @@ public class ScrapBookController extends Controller {
         quantityToScrap = providedQuantity;
       } else {
         // Show notification for exceeded quantity
-        Notifications.create()
-            .title("Надвишено количество")
-            .text("Предоставеното количество надвишава броя на книгите")
-            .hideAfter(Duration.seconds(5)) // Duration to display the notification (optional)
-            .showWarning();
+        showNotification("Предоставеното количество надвишава броя на книгите!",
+            NotificationType.WARNING);
       }
     }
   }

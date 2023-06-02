@@ -3,19 +3,22 @@ package com.example.library.controllers;
 import com.example.library.MainApplication;
 import com.example.library.dao.UserDao;
 import com.example.library.entities.ComboBoxType;
-import com.example.library.entities.InputFormat;
+import com.example.library.entities.NotificationType;
 import com.example.library.entities.Role;
 import com.example.library.entities.User;
 import com.example.library.errors.ErrorMessages;
 import com.example.library.exceptions.ValidationInputException;
 import com.example.library.helpers.HashPasswordHelper;
 import com.example.library.helpers.ServiceLocator;
-import javafx.fxml.FXML;
-import javafx.scene.control.*;
-
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
+import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 
 public class CreateUserController extends Controller {
 
@@ -49,6 +52,7 @@ public class CreateUserController extends Controller {
     try {
       validateInputs();
       setNewUserInDatabase();
+      showNotification("Успешно създадохте нов потребител.", NotificationType.SUCCESS);
     } catch (ValidationInputException | NoSuchAlgorithmException | IOException e) {
     }
   }
@@ -90,7 +94,7 @@ public class CreateUserController extends Controller {
   }
 
   public void initialize() {
-    setInputTextFormat(InputFormat.MOBILE_NUMBER, mobileNumberInput);
+    //setInputTextFormat(InputFormat.MOBILE_NUMBER, mobileNumberInput);
     setValuesToCombox(ComboBoxType.TYPE_USER, typeUser);
   }
 

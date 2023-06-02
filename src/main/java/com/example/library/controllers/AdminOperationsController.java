@@ -26,10 +26,6 @@ public class AdminOperationsController {
     MainApplication.changeScene("views/add-book.fxml", 520, 600);
   }
 
-  @FXML
-  protected void rentBooks() throws IOException {
-    MainApplication.changeScene("views/hello-view.fxml", 520, 500);
-  }
 
   @FXML
   protected void returnBooks() throws IOException {

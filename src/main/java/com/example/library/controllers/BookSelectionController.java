@@ -5,6 +5,7 @@ import com.example.library.dao.BookDao;
 import com.example.library.dao.BorrowedBookDao;
 import com.example.library.entities.Book;
 import com.example.library.entities.BorrowedBook;
+import com.example.library.entities.NotificationType;
 import com.example.library.entities.User;
 import com.example.library.helpers.ServiceLocator;
 import javafx.collections.FXCollections;
@@ -67,31 +68,37 @@ public class BookSelectionController extends Controller {
   private final BookDao bookDao = ServiceLocator.getInstance().getBookDao();
   private static final Logger logger = LogManager.getLogger(BookSelectionController.class);
 
-
   @FXML
   void giveBook() {
     Book selectedBook = books.getSelectionModel().getSelectedItem();
     if (Objects.isNull(selectedBook)) {
-      showAlert("Грешна операция!", "Потребителят се пробва да извърши операция преди да е избрал елемент.");
-      logger.info(String.format("User %s tried to borrow a book, but no book was selected.", this.readerId));
+      showAlert("Грешна операция!",
+          "Потребителят се пробва да извърши операция преди да е избрал елемент.");
+      logger.info(String.format("User %s tried to borrow a book, but no book was selected.",
+          this.readerId));
       return;
     }
 
     if (selectedBook.getQuantity() <= selectedBook.getBorrowedQuantity()) {
-        showAlert("Няма налични бройки от тази книга!", "Моля, изберете друга книга.");
-        logger.info(String.format("User %s tried to borrow book %s, but there are no available copies.",
-            this.readerId, selectedBook.getId()));
-        return;
-    }
-
-    List<BorrowedBook> userBorrowedBooks = borrowedBookDao.getAllByReaderId(this.readerId);
-    if (userBorrowedBooks.stream().anyMatch(borrowedBook -> borrowedBook.getBookId() == selectedBook.getId())) {
-      showAlert("Читателят вече е взел тази книга!", "Моля, изберете друга книга.");
-      logger.info(String.format("User %s tried to borrow book %s, but already has it.", this.readerId, selectedBook.getId()));
+      showAlert("Няма налични бройки от тази книга!", "Моля, изберете друга книга.");
+      logger.info(
+          String.format("User %s tried to borrow book %s, but there are no available copies.",
+              this.readerId, selectedBook.getId()));
       return;
     }
 
-    showDateInputDialog("Изберете срок за връщане", "Изберете краен срок за връщане на книгата 15 или 30 дни.",
+    List<BorrowedBook> userBorrowedBooks = borrowedBookDao.getAllByReaderId(this.readerId);
+    if (userBorrowedBooks.stream()
+        .anyMatch(borrowedBook -> borrowedBook.getBookId() == selectedBook.getId())) {
+      showAlert("Читателят вече е взел тази книга!", "Моля, изберете друга книга.");
+      logger.info(
+          String.format("User %s tried to borrow book %s, but already has it.", this.readerId,
+              selectedBook.getId()));
+      return;
+    }
+
+    showDeadlineDialog("Изберете срок за връщане",
+        "Изберете краен срок за връщане на книгата 15 или 30 дни.",
         "Срок на отдаване (дни):");
     if (returnDate != null) {
       BorrowedBook borrowedBook = new BorrowedBook(null, selectedBook.getId(), this.readerId,
@@ -103,6 +110,7 @@ public class BookSelectionController extends Controller {
       });
       refreshTable();
       logger.info(String.format("User %s borrowed book %s.", this.readerId, selectedBook.getId()));
+      showNotification("Успещно отдадохте книга.", NotificationType.SUCCESS);
     }
   }
 
@@ -141,7 +149,7 @@ public class BookSelectionController extends Controller {
       filteredBooks = new FilteredList<>(FXCollections.observableArrayList(allBooks));
       books.setItems(filteredBooks);
       books.refresh();
-  } catch (Exception e) {
+    } catch (Exception e) {
       logger.error("Error while loading books.", e);
     }
   }

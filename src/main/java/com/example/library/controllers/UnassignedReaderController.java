@@ -2,6 +2,7 @@ package com.example.library.controllers;
 
 import com.example.library.MainApplication;
 import com.example.library.dao.UserDao;
+import com.example.library.entities.NotificationType;
 import com.example.library.entities.User;
 import com.example.library.helpers.ServiceLocator;
 import javafx.collections.FXCollections;
@@ -45,6 +46,7 @@ public class UnassignedReaderController extends Controller {
       selectedUser.setIsAssign(false);
       userDao.update(selectedUser);
       filteredReaders.getSource().remove(selectedUser);
+      showNotification("Успешно отписахте читател.", NotificationType.SUCCESS);
     }
   }
 

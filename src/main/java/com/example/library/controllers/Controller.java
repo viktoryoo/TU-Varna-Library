@@ -2,6 +2,7 @@ package com.example.library.controllers;
 
 import com.example.library.entities.ComboBoxType;
 import com.example.library.entities.InputFormat;
+import com.example.library.entities.NotificationType;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -16,8 +17,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.Duration;
 import javafx.util.converter.LocalDateStringConverter;
 import javafx.util.converter.LocalDateTimeStringConverter;
+import org.controlsfx.control.Notifications;
 
 public class Controller {
 
@@ -67,7 +70,7 @@ public class Controller {
         new LocalDateStringConverter(formatter, formatter)));
   }
 
-  protected void showDateInputDialog(String titleDialog, String headerTextDialog,
+  protected void showDeadlineDialog(String titleDialog, String headerTextDialog,
       String contentTextDialog) {
     ChoiceDialog<Integer> dialog =
         new ChoiceDialog<>(FIFTEEN_DAYS, List.of(FIFTEEN_DAYS, THIRTY_DAYS));
@@ -93,6 +96,34 @@ public class Controller {
     alert.setHeaderText(title);
     alert.setContentText(content);
     alert.showAndWait();
+  }
+
+  protected void showNotification(String content, NotificationType type) {
+
+    switch (type) {
+      case SUCCESS -> {
+        Notifications.create()
+            .title("Успешна операция")
+            .text(content)
+            .hideAfter(Duration.seconds(5))
+            .showConfirm();
+      }
+      case WARNING -> {
+        Notifications.create()
+            .title("Неуспешна операция")
+            .text(content)
+            .hideAfter(Duration.seconds(5))
+            .showWarning();
+      }
+
+      case ERROR -> {
+        Notifications.create()
+            .title("Неуспешна операция")
+            .text(content)
+            .hideAfter(Duration.seconds(5))
+            .showError();
+      }
+    }
   }
 
   private boolean isValidDateInput(String input) {

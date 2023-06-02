@@ -6,6 +6,7 @@ import com.example.library.dao.BorrowedBookDao;
 import com.example.library.dto.UserBook;
 import com.example.library.entities.Book;
 import com.example.library.entities.BorrowedBook;
+import com.example.library.entities.NotificationType;
 import com.example.library.entities.User;
 import com.example.library.helpers.ServiceLocator;
 import com.example.library.mappers.UserBookMapper;
@@ -68,23 +69,27 @@ public class ReturnBookSelectionController extends Controller {
   private final BookDao bookDao = ServiceLocator.getInstance().getBookDao();
   private static final Logger logger = LogManager.getLogger(ReturnBookSelectionController.class);
 
-
   @FXML
   void giveBook() {
     UserBook selectedBook = books.getSelectionModel().getSelectedItem();
     if (Objects.isNull(selectedBook)) {
-      logger.info(String.format("User %s tried to borrow a book, but no book was selected.", this.readerId));
+      logger.info(String.format("User %s tried to borrow a book, but no book was selected.",
+          this.readerId));
       return;
     }
 
-    Optional<BorrowedBook> userBorrowedBooks = borrowedBookDao.getBorrowedReaderId(this.readerId, selectedBook.getId());
+    Optional<BorrowedBook> userBorrowedBooks =
+        borrowedBookDao.getBorrowedReaderId(this.readerId, selectedBook.getId());
     if (userBorrowedBooks.isEmpty()) {
-      logger.info(String.format("User %s tried to return book %s, but has not borrowed it.", this.readerId, selectedBook.getId()));
+      logger.info(
+          String.format("User %s tried to return book %s, but has not borrowed it.", this.readerId,
+              selectedBook.getId()));
       return;
     }
 
     updateBooks(selectedBook, userBorrowedBooks);
     refreshTable();
+    showNotification("Успешно върната книга!", NotificationType.SUCCESS);
   }
 
   private boolean updateBooks(UserBook selectedBook, Optional<BorrowedBook> userBorrowedBooks) {
@@ -94,7 +99,9 @@ public class ReturnBookSelectionController extends Controller {
 
     Optional<Book> book = bookDao.get(selectedBook.getId());
     if (book.isEmpty()) {
-      logger.info(String.format("User %s tried to return book %s, but it does not exist.", this.readerId, selectedBook.getId()));
+      logger.info(
+          String.format("User %s tried to return book %s, but it does not exist.", this.readerId,
+              selectedBook.getId()));
       return true;
     }
 
@@ -151,7 +158,7 @@ public class ReturnBookSelectionController extends Controller {
       filteredBooks = new FilteredList<>(FXCollections.observableArrayList(allBooks));
       books.setItems(filteredBooks);
       books.refresh();
-  } catch (Exception e) {
+    } catch (Exception e) {
       logger.error("Error while loading books.", e);
     }
   }
